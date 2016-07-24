@@ -40,8 +40,10 @@ class CaculateBrain {
     func performOperation(symbol: String) {
         if let operation = operations[symbol] {
             switch operation {
-            case .Constant(let value): accumulator = value
-            case .UnaryOperation(let fun): accumulator = fun(accumulator)
+            case .Constant(let value):
+                accumulator = value
+            case .UnaryOperation(let fun):
+                accumulator = fun(accumulator)
             case .BinaryOperation(let fun):
                 executePendingBinaryOperation()
                 pending = PendingBinaryOperationInfo(binaryFunction: fun, firstOperand: accumulator)
