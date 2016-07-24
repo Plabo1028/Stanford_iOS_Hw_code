@@ -9,16 +9,16 @@
 import UIKit
 
 class ViewController: UIViewController {
-
-    @IBOutlet weak var display: UILabel!
     
-    var userIsInTheMiddleOfTyping = false
+    @IBOutlet private weak var display: UILabel!
     
-    @IBAction func touchDigit(sender: UIButton) {
+    private var userIsInTheMiddleOfTyping = false
+    
+    @IBAction private func touchDigit(sender: UIButton) {
         let digit = sender.currentTitle!
         if userIsInTheMiddleOfTyping {
-        let textCurrentlyInDisplay = display.text!
-        display.text = textCurrentlyInDisplay + digit
+            let textCurrentlyInDisplay = display.text!
+            display.text = textCurrentlyInDisplay + digit
         }
         else {
             display.text = digit
@@ -26,14 +26,29 @@ class ViewController: UIViewController {
         userIsInTheMiddleOfTyping = true
     }
     
-    @IBAction func performOperation(sender: UIButton) {
-        userIsInTheMiddleOfTyping = false
-        if let mathmaticalSymbol = sender.currentTitle {
-            if mathmaticalSymbol == "π" {
-                display.text = String(M_PI)
-            }
+    private var displayValue : Double {
+        get {
+            return Double(display.text!)!
+            //            because the display could be "hello" can not convert to Double
+        }
+        set {
+            display.text = String(newValue)
         }
     }
-
+    
+    private var brain = CaculateBrain()
+    //    private var brain: CaculateBrain = CaculateBrain()
+    
+    @IBAction private func performOperation(sender: UIButton) {
+        if userIsInTheMiddleOfTyping {
+            brain.setOperand(displayValue)
+            userIsInTheMiddleOfTyping = false
+        }
+        if let mathmaticalSymbol = sender.currentTitle {
+            brain.performOperation(mathmaticalSymbol)
+        }
+        displayValue = brain.result
+    }
+    
 }
 
