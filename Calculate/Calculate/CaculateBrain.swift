@@ -10,53 +10,53 @@ import Foundation
 
 class CaculateBrain {
     
-    private var accumulator = 0.0
+    fileprivate var accumulator = 0.0
     
-    func setOperand(operand: Double) {
+    func setOperand(_ operand: Double) {
         accumulator = operand
     }
     
-    private var operations: Dictionary<String,Operation> = [
-        "π" : Operation.Constant(M_PI), // M_PI,
-        "e" : Operation.Constant(M_E), //M_E,
-        "√" : Operation.UnaryOperation(sqrt), // sqrt,
-        "cos" : Operation.UnaryOperation(cos), // cos
-        "±" : Operation.UnaryOperation( {-$0} ),
-        "×" : Operation.BinaryOperation( { $0 * $1} ),
+    fileprivate var operations: Dictionary<String,Operation> = [
+        "π" : Operation.constant(M_PI), // M_PI,
+        "e" : Operation.constant(M_E), //M_E,
+        "√" : Operation.unaryOperation(sqrt), // sqrt,
+        "cos" : Operation.unaryOperation(cos), // cos
+        "±" : Operation.unaryOperation( {-$0} ),
+        "×" : Operation.binaryOperation( { $0 * $1} ),
 //      "×" : Operation.BinaryOperation( { (op1: Double, op2: Double) -> Double in return op1*op2 } )
-        "÷" : Operation.BinaryOperation({ $0 / $1}),
-        "+" : Operation.BinaryOperation({ $0 + $1}),
-        "−" : Operation.BinaryOperation({ $0 -  $1}),
-        "=" : Operation.Equals
+        "÷" : Operation.binaryOperation({ $0 / $1}),
+        "+" : Operation.binaryOperation({ $0 + $1}),
+        "−" : Operation.binaryOperation({ $0 -  $1}),
+        "=" : Operation.equals
     ]
     
-    private enum Operation {
-        case Constant(Double)
-        case UnaryOperation((Double) -> Double )
-        case BinaryOperation((Double,Double) -> Double)
-        case Equals
+    fileprivate enum Operation {
+        case constant(Double)
+        case unaryOperation((Double) -> Double )
+        case binaryOperation((Double,Double) -> Double)
+        case equals
     }
     
-    func performOperation(symbol: String) {
+    func performOperation(_ symbol: String) {
         if let operation = operations[symbol] {
             switch operation {
-            case .Constant(let value):
+            case .constant(let value):
                 accumulator = value
-            case .UnaryOperation(let fun):
+            case .unaryOperation(let fun):
                 accumulator = fun(accumulator)
-            case .BinaryOperation(let fun):
+            case .binaryOperation(let fun):
                 executePendingBinaryOperation()
                 pending = PendingBinaryOperationInfo(binaryFunction: fun, firstOperand: accumulator)
-            case .Equals:
+            case .equals:
                 executePendingBinaryOperation()
 //            default: break
             }
         }
     }
     
-    private var pending: PendingBinaryOperationInfo?
+    fileprivate var pending: PendingBinaryOperationInfo?
     
-    private func executePendingBinaryOperation()
+    fileprivate func executePendingBinaryOperation()
     {
         if pending != nil {
             accumulator = pending!.binaryFunction(pending!.firstOperand, accumulator)
@@ -64,7 +64,7 @@ class CaculateBrain {
         }
     }
     
-    private struct PendingBinaryOperationInfo {
+    fileprivate struct PendingBinaryOperationInfo {
         var binaryFunction: (Double,Double) -> Double
         var firstOperand: Double
     }
