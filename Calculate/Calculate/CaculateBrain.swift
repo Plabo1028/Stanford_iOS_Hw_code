@@ -17,7 +17,7 @@ class CaculateBrain {
     }
     
     fileprivate var operations: Dictionary<String,Operation> = [
-        "π" : Operation.constant(M_PI), // M_PI,
+        "π" : Operation.constant(Double.pi), // M_PI,
         "e" : Operation.constant(M_E), //M_E,
         "√" : Operation.unaryOperation(sqrt), // sqrt,
         "cos" : Operation.unaryOperation(cos), // cos
