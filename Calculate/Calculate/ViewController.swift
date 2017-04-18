@@ -26,7 +26,7 @@ class ViewController: UIViewController {
         userIsInTheMiddleOfTyping = true
     }
     
-    fileprivate var displayValue : Double {
+    var displayValue : Double {
         get {
             return Double(display.text!)!
             //            because the display could be "hello" can not convert to Double
@@ -36,7 +36,7 @@ class ViewController: UIViewController {
         }
     }
     
-    fileprivate var brain = CaculateBrain()
+    private var brain = CalculatorBrain()
     //    private var brain: CaculateBrain = CaculateBrain()
     
     @IBAction fileprivate func performOperation(_ sender: UIButton) {
@@ -47,7 +47,9 @@ class ViewController: UIViewController {
         if let mathmaticalSymbol = sender.currentTitle {
             brain.performOperation(mathmaticalSymbol)
         }
-        displayValue = brain.result
+        if let result = brain.result {
+            displayValue = result
+        }
     }
     
 }
