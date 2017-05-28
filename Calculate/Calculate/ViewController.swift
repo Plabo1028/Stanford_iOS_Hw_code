@@ -10,20 +10,37 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    @IBOutlet fileprivate weak var display: UILabel!
+    @IBOutlet weak var display: UILabel!
     
-    fileprivate var userIsInTheMiddleOfTyping = false
+    @IBOutlet weak var history: UILabel!
     
-    @IBAction fileprivate func touchDigit(_ sender: UIButton) {
+    var userIsInTheMiddleOfTyping = false
+    
+    @IBAction func touchDigit(_ sender: UIButton) {
         let digit = sender.currentTitle!
         if userIsInTheMiddleOfTyping {
             let textCurrentlyInDisplay = display.text!
-            display.text = textCurrentlyInDisplay + digit
+            if "." != digit || !textCurrentlyInDisplay.contains(".") {
+                display.text = textCurrentlyInDisplay + digit
+            }
+//            if "." == digit && textCurrentlyInDisplay.contains(".") {
+//                print("Error")
+//            }
         }
         else {
-            display.text = digit
+            switch digit {
+                case ".":
+                    display.text = "0."
+                case "0":
+                    if "0" == display.text {
+                        return
+                    }
+                    fallthrough
+                default:
+                    display.text = digit
+            }
+            userIsInTheMiddleOfTyping = true
         }
-        userIsInTheMiddleOfTyping = true
     }
     
     var displayValue : Double {
@@ -39,7 +56,14 @@ class ViewController: UIViewController {
     private var brain = CalculatorBrain()
     //    private var brain: CaculateBrain = CaculateBrain()
     
-    @IBAction fileprivate func performOperation(_ sender: UIButton) {
+    @IBAction func reset(_ sender: UIButton) {
+        userIsInTheMiddleOfTyping = false
+        displayValue = 0
+        history.text = " "
+        brain = CalculatorBrain()
+    }
+    
+    @IBAction func performOperation(_ sender: UIButton) {
         if userIsInTheMiddleOfTyping {
             brain.setOperand(displayValue)
             userIsInTheMiddleOfTyping = false
@@ -50,7 +74,25 @@ class ViewController: UIViewController {
         if let result = brain.result {
             displayValue = result
         }
+        if let description = brain.description {
+            history.text = description + (brain.resultIsPending ? "⋯" : "=")
+        } else {
+            history.text = " "
+        }
     }
     
 }
+
+extension String {
+    func beautifyNumbers() -> String {
+        return self.replace(pattern: "\\.0+([^0-9]|$)", with: "$1")
+    }
+    
+    func replace(pattern: String, with replacement: String) -> String {
+        let regex = try! NSRegularExpression(pattern: pattern, options: .caseInsensitive)
+        let range = NSMakeRange(0, self.characters.count)
+        return regex.stringByReplacingMatches(in: self, options: [], range: range, withTemplate: replacement)
+    }
+}
+
 

@@ -57,8 +57,8 @@
 			isa = PBXGroup;
 			children = (
 				0E29A7851D33CF9C00EA8BEF /* Supporting Files */,
-				0E29A7751D32A2FD00EA8BEF /* ViewController.swift */,
 				6841C1061EA5BEB200AACBCE /* CalculatorBrain.swift */,
+				0E29A7751D32A2FD00EA8BEF /* ViewController.swift */,
 				0E29A7771D32A2FD00EA8BEF /* Main.storyboard */,
 			);
 			path = Calculate;
