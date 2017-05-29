@@ -116,9 +116,9 @@ struct CalculatorBrain {
     var description: String? {
         get {
             if resultIsPending {
-                return pendingBinaryOperation!.description(pendingBinaryOperation!.firstOperand.1, accumulator?.1 ?? "")
+                return pendingBinaryOperation!.description(pendingBinaryOperation!.firstOperand.1, "")
             } else {
-                return accumulator?.1
+                return accumulator!.1
             }
         }
     }
